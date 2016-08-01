@@ -18,10 +18,10 @@ import br.com.caelum.fj59.carangos.webservice.WebClient;
 public class BuscaMaisPublicacoesTask extends AsyncTask<Pagina, Void, List<Publicacao>> {
 
     private Exception erro;
-    private MainActivity activity;
+    private BuscaMaisPublicacoesDelegate delegate;
 
-    public BuscaMaisPublicacoesTask(MainActivity activity) {
-        this.activity = activity;
+    public BuscaMaisPublicacoesTask(BuscaMaisPublicacoesDelegate delegate) {
+        this.delegate = delegate;
     }
 
     @Override
@@ -42,12 +42,11 @@ public class BuscaMaisPublicacoesTask extends AsyncTask<Pagina, Void, List<Publi
 
     @Override
     protected void onPostExecute(List<Publicacao> retorno) {
-        MyLog.i("RETORNO OBTIDO!" + retorno);
+              if (retorno!=null) {
+            this.delegate.lidaComRetorno(retorno);
 
-        if (retorno!=null) {
-            this.activity.atualizaListaCom(retorno);
         } else {
-            Toast.makeText(this.activity, "Erro na busca dos dados", Toast.LENGTH_SHORT).show();
+            this.delegate.lidaComErro(this.erro);
         }
     }
 }
